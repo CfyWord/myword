@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WENX</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="__LAYUI__/css/layui.css"  media="all">
+	<link rel="stylesheet" href="__ADMIN__/css/style.css"  media="all">
+	<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+	<!--[if lt IE 9]>
+	  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+	  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div class="wenx-body">
+		<div class="wenx-row layui-card">
+		    <div class="layui-card-header">
+		    	<i class="layui-icon layui-icon-return balck" onclick="history.go(-1);" >返回</i>  
+		    	<a href="{:url('power/index')}">权限列表</a> / <span>编辑权限</span>
+		    	<i class="layui-icon layui-icon-refresh-3 reload" onclick="location.reload()">刷新</i>
+		    </div>
+			<div class="layui-card-body">
+				<form class="layui-form" action="">
+					<input type="hidden" name="id" value="{$list.id}">
+					<div class="layui-form-item">
+			            <label class="layui-form-label">权限名称</label>
+			            <div class="layui-input-block">
+			                <input type="text" name="name" lay-verify="required" value="{$list.name}" autocomplete="off" placeholder="" class="layui-input">
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">控制器/方法</label>
+			            <div class="layui-input-inline">
+			                <select name="controller" id="controller" lay-verify="required" lay-filter="controller" lay-search>
+							  <option value="">请选择控制器</option>
+							  {volist name='modules_list' id='vo'}
+							  <option value="{$vo}" {if $controller==$vo}selected{/if}>{$vo}</option>
+							  {/volist}
+							</select> 
+			            </div>
+			            <div class="layui-input-inline">
+			                <select name="action" id="action" lay-verify="required" lay-search>
+							  <option value="">请选择方法</option>
+							  {volist name="action_list" id='vo'}
+							   <option value="{$vo}" {if $action==$vo}selected{/if}>{$vo}</option>
+							  {/volist}
+							</select> 
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">所属父级</label>
+			            <div class="layui-input-inline">
+			                <select name="pid" lay-verify="required" lay-search>
+						        <option value="0">顶级栏目</option>
+								{volist name="power" id="vo"}
+						        <option value="{$vo.id}" {$list.pid==$vo.id?'selected':''}>{$vo.lefthtml.$vo.name}</option>
+						    	{/volist}
+						    </select>
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">菜单图标</label>
+			            <div class="layui-input-block">
+			                <input type="text" name="icon" value="{$list.icon}" autocomplete="off" placeholder="" class="layui-input">
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">权限状态</label>
+			            <div class="layui-input-block">
+			                <input type="radio" name="status" value="1" {$list.status==1?'checked':''} title="正常" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>正常</div></div>
+			                <input type="radio" name="status" value="0" {$list.status==0?'checked':''} title="禁用"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>禁用</div></div>
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">菜单状态</label>
+			            <div class="layui-input-block">
+			                <input type="radio" name="menustatus" value="1" {$list.menustatus==1?'checked':''} title="显示" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>显示</div></div>
+			                <input type="radio" name="menustatus" value="0" {$list.menustatus==0?'checked':''} title="隐藏"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>隐藏</div></div>
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">排序</label>
+			            <div class="layui-input-block">
+			                <input type="text" name="sort" lay-verify="required" value="{$list.sort}" autocomplete="off" value="50" placeholder="" class="layui-input">
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <div class="layui-input-block">
+			                <button class="layui-btn" lay-submit="" lay-filter="wenx-demo" >立即提交</button>
+			                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			            </div>
+			        </div>
+	        	</form>
+			</div>
+		</div>
+	</div>
+<script src="__LAYUI__/layui.js" charset="utf-8"></script>	
+<script src="__ADMIN__/js/ajax.js" charset="utf-8"></script>	
+<script>
+layui.use(['form','jquery'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,$ = layui.$;
+  	//监听提交
+  	form.on('submit(wenx-demo)', function(data){
+
+    	opt={method:"post",url:"{:url('power/edit')}",data:data.field};
+
+    	ajax(opt);
+
+    	return false;
+  	});
+  	form.on('select(controller)', function(data){
+	  	$.ajax({
+	  		url:'/admin/Power/ajax_get_action',
+	  		data:{"control":data.value},
+	  		type:"POST",
+	  		dataType:'json',
+	  		success:function (res) {
+	  			if(res){
+	  				list = res.selectControl;
+	  				var html = '<option value="">请选择方法</option>';
+	  				for (var i = 0; i < list.length; i++) {
+	  					html += '<option value="'+list[i]+'">'+list[i]+'</option>';
+	  				}
+	  				$('#action').html(html);
+	  				form.render('select'); //刷新select选择框渲染
+	  			}
+	  		}
+		})
+	})
+});
+</script>
+</body>
+</html>

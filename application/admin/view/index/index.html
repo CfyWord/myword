@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WENX</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="__LAYUI__/css/layui.css"  media="all">
+	<link rel="stylesheet" href="__AWESOME__/css/font-awesome.css"  media="all">
+	<link rel="stylesheet" href="__ADMIN__/css/style.css"  media="all">
+	<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+	<!--[if lt IE 9]>
+	  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+	  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  	
+  	{include file="common/header" /}
+
+  	{include file="common/left" /}
+
+  	<div class="wenx-pagetabs">
+  		<div class="layui-icon wenx-tabs-control layui-icon-prev"></div>
+  		<div class="layui-icon wenx-tabs-control layui-icon-next"></div>
+  		<div class="layui-icon wenx-tabs-control layui-icon-down">
+          	<ul class="layui-nav wenx-tabs-select" lay-filter="wenx-pagetabs-nav">
+	            <li class="layui-nav-item" lay-unselect="">
+	              	<a href="javascript:;"><span class="layui-nav-more"></span></a>
+		            <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit">
+		                <dd data-target="closeThisTabs" class="wenx-click-admin"><a href="javascript:;">关闭当前标签页</a></dd>
+		                <dd data-target="closeOtherTabs" class="wenx-click-admin"><a href="javascript:;">关闭其它标签页</a></dd>
+		                <dd data-target="closeAllTabs" class="wenx-click-admin"><a href="javascript:;">关闭全部标签页</a></dd>
+		            </dl>
+	            </li>
+          	</ul>
+        </div>
+	    <div class="layui-tab" lay-unauto lay-allowclose="true" lay-filter="demo">
+			<ul class="layui-tab-title">
+			    <li class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+			</ul>
+			<div class="layui-tab-content" id="wenx-content">
+			    <div class="layui-tab-item layui-show"><iframe src="{:url('main')}" ></iframe></div>
+			</div>	
+		</div>
+	</div>
+</div>
+
+<script src="__LAYUI__/layui.js" charset="utf-8"></script>
+<script src="__ADMIN__/js/admin.js" charset="utf-8"></script>             
+</body>
+</html>

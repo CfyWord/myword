@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WENX</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="__LAYUI__/css/layui.css"  media="all">
+	<link rel="stylesheet" href="__ADMIN__/css/style.css"  media="all">
+	<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+	<!--[if lt IE 9]>
+	  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+	  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div class="wenx-body">
+		<div class="wenx-row layui-card">
+		    <div class="layui-card-header">
+		    	<i class="layui-icon layui-icon-return balck" onclick="history.go(-1);" >返回</i>  
+		    	<a href="{:url('GoodsCategory/index')}">分类列表</a> / <span>编辑分类</span>
+		    	<i class="layui-icon layui-icon-refresh-3 reload" onclick="location.reload()">刷新</i>
+		    </div>
+			<div class="layui-card-body">
+				<form class="layui-form" action="">
+					<input type="hidden" name="id" value="{$list.id}">
+					<div class="layui-form-item">
+			            <label class="layui-form-label">上级分类</label>
+			            <div class="layui-input-inline">
+			                <select name="pid" lay-verify="required" lay-search>
+						        <option value="0">顶级分类</option>
+						        {volist name='goods_category' id='vo'}
+						        <option value="{$vo.id}" {$vo.id==$list.pid?'selected':''}>{$vo.lefthtml.$vo.category_name}</option>
+						        {/volist}
+						    </select>
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">分类名称</label>
+			            <div class="layui-input-block">
+			                <input type="text" name="category_name" lay-verify="required" value="{$list.category_name}" autocomplete="off" placeholder="" class="layui-input">
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">分类别名</label>
+			            <div class="layui-input-block">
+			                <input type="text" name="category_bname" lay-verify="required" value="{$list.category_bname}" autocomplete="off" placeholder="" class="layui-input">
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <label class="layui-form-label">分类图片</label>
+			            <div class="layui-input-block">
+			                <div class="layui-upload-drag demoimg" id="test10" lay-data="{name:'category_img'}">
+								{if condition="($list.category_img == '')"}
+							  	<p><i class="layui-icon"></i></p>
+							  	<p>点击上传，或将文件拖拽到此处</p>
+							  	{else /}
+							  	<img src="{$list.category_img}" title="点击上传，或将文件拖拽到此处" class="fileimg">
+							  	{/if}
+							</div>
+			            </div>
+			        </div>
+			        <div class="layui-form-item">
+			            <div class="layui-input-block">
+			                <button class="layui-btn" lay-submit="" lay-filter="wenx-demo" >立即提交</button>
+			                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			            </div>
+			        </div>
+	        	</form>
+			</div>
+		</div>
+	</div>
+<script src="__LAYUI__/layui.js" charset="utf-8"></script>	
+<script src="__ADMIN__/js/ajax.js" charset="utf-8"></script>	
+<script>
+layui.use(['form','upload','element'], function(){
+	var form = layui.form
+	   ,layer = layui.layer
+	   , $ = layui.jquery
+	   ,upload = layui.upload
+	   ,element = layui.element;
+
+	   	 //拖拽上传
+		  upload.render({
+		    elem: '#test10'
+		    ,url: "{:url('upload/picture')}"
+		    ,done: function(res){
+	      		layer.msg(res.msg, {icon: res.code});
+	      		if(res.code == 1){
+	      			var text = '<img src="' + res.url + '" title="点击上传，或将文件拖拽到此处" style="max-width: 300px;width: 100%;"><input type="hidden" name="'+this.name+'" value="' + res.url + '" >';
+	      			$('.layui-upload-drag').html(text);
+	      		}
+	    	}
+		  });
+
+
+
+  	//监听提交
+  	form.on('submit(wenx-demo)', function(data){
+    	opt={method:"post",url:"{:url('GoodsCategory/edit')}",data:data.field};
+    	ajax(opt);
+    	return false;
+  	});
+  
+  
+});
+</script>
+</body>
+</html>

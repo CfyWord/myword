@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>后台管理系统登陆</title>
+        <link rel="stylesheet" href="__LAYUI__/css/layui.css">
+        <link rel="stylesheet" href="__ADMIN__/css/login.css">
+    </head>
+    <body>
+        <div class="wenx-login layui-anim layui-anim-up">
+            <h1>CMS 后台管理系统</h1></p>
+            <form class="layui-form" action="" method="post">
+                <div class="layui-form-item">
+                    <input type="text" name="username"  lay-verify="required" placeholder="请输入账号" autocomplete="off" value="" class="layui-input"></div>
+                <div class="layui-form-item">
+                    <input type="password" name="password" lay-verify="required"  placeholder="请输入密码" autocomplete="off" value="" class="layui-input"></div>
+                <div class="layui-form-item form_code">
+                    <input class="layui-input" name="code" lay-verify="required" placeholder="验证码"  type="text" autocomplete="off">
+                    <div class="code">
+                        <img src="{:captcha_src()}" width="116" height="36"></div>
+                </div>
+                <button class="layui-btn login_btn" lay-submit="" lay-filter="login">登陆系统</button>
+            </form>
+        </div>
+    </body>
+</html>
+<script type="text/javascript" src="__LAYUI__/layui.js"></script>
+<script type="text/javascript" src="__ADMIN__/js/jquery-3.3.1.min.js"></script>
+<script>
+layui.use(['jquery', 'form',], function(){
+    var form = layui.form
+    ,jquery = layui.jquery
+    ,$ = layui.jquery
+    ,layer = layui.layer;
+
+    /**重新生成验证码*/
+    function reqCaptcha() {
+        var url = "{:captcha_src()}";
+        jquery('.code img').attr("src", url);
+    }
+    /**点击验证码重新生成*/
+    $('.code img').on('click',function() {
+        reqCaptcha();
+    });
+    /**监听登陆提交*/
+    form.on('submit(login)',function(data) {
+        //登陆验证
+        $.ajax({
+            url: '{:url("login/doLogin")}',
+            type: 'post',
+            data: data.field,
+            success: function(data) {
+                if(data.code == 1){
+                    layer.msg('登陆中，请稍候', {icon: 16,shade: 0.01,time: 2000},function(){
+                        window.location.href = data.url;  
+                    });
+                }else{
+                    layer.msg(data.msg, {icon: 2,time: 2000});
+                    reqCaptcha();
+                }
+            }
+        });
+    return false;
+    });
+});
+</script>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WENX</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="__LAYUI__/css/layui.css"  media="all">
+	<link rel="stylesheet" href="__AWESOME__/css/font-awesome.css"  media="all">
+	<link rel="stylesheet" href="__ADMIN__/css/style.css"  media="all">
+	<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+	<!--[if lt IE 9]>
+	  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+	  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div class="wenx-body">
+		<div class="wenx-row layui-card">
+			<div class="layui-card-header">
+		    	<a href="javascript:;">位置：</a>
+		    	{volist name="catenav" id="vo" key="k"}
+		    	{$k==1?'':'/'} <span>{$vo.name}</span>
+		    	{/volist}
+		    </div>
+		    <div class="wenx-card-header demoTable">
+			    <a class="layui-btn layui-btn-sm" href="{:url('article/add',['cate_id'=>input('param.cate_id')])}"><i class="layui-icon">&#xe61f;</i>添加</a>
+			    <button class="layui-btn layui-btn-danger layui-btn-sm" data-type="getCheckData"><i class="layui-icon">&#xe640;</i>删除</button>
+			    <button class="layui-btn layui-btn-normal layui-btn-sm" data-type="isgoodCheck" data-attr="add"><i class="layui-icon">&#x1005;</i>推荐</button>
+			    <button class="layui-btn layui-btn-normal layui-btn-sm" data-type="istopCheck"  data-attr="add"><i class="layui-icon">&#x1005;</i>置顶</button>
+			    <button class="layui-btn layui-btn-normal layui-btn-sm" data-type="isgoodCheck" data-attr="cancel"><i class="layui-icon">&#x1007;</i>取消推荐</button>
+			    <button class="layui-btn layui-btn-normal layui-btn-sm" data-type="getCheckData" data-attr="cancel"><i class="layui-icon">&#x1007;</i>取消置顶</button>
+		    </div>
+			<div class="layui-card-body">
+				<table class="layui-hide" id="test" lay-filter="demo"></table>
+				<script type="text/html" id="switchTpl">
+				    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="显示|禁止" lay-filter="statusDemo" {{ d.status == 1 ? 'checked' : '' }}>
+				</script>
+				<script type="text/html" id="isgood">
+					{{#  if(d.isgood === 1){ }}
+					    <a href="javascript:;" id="isgood{{d.id}}" onclick="return isgood('{{d.id}}');"><i class="layui-icon" style="font-size: 30px; color: #009688;">&#xe610;</i></a> 
+					{{#  } else { }}
+					    <a href="javascript:;" id="isgood{{d.id}}" onclick="return isgood('{{d.id}}');"><i class="layui-icon" style="font-size: 30px; color: #FF5722;">&#x1007;</i></a>
+					{{#  } }}
+				</script>
+				<script type="text/html" id="istop">
+					{{#  if(d.istop === 1){ }}
+					    <a href="javascript:;" id="istop{{d.id}}" onclick="return istop('{{d.id}}');"><i class="layui-icon" style="font-size: 30px; color: #009688;">&#xe610;</i></a> 
+					{{#  } else { }}
+					    <a href="javascript:;" id="istop{{d.id}}" onclick="return istop('{{d.id}}');"><i class="layui-icon" style="font-size: 30px; color: #FF5722;">&#x1007;</i></a>
+					{{#  } }}
+				</script>
+				<script type="text/html" id="barDemo">
+				  <a class="layui-btn layui-btn-xs" lay-event="edit" href="{:url('article/edit',['cate_id'=>input('param.cate_id')])}?id={{d.id}}">编辑</a>
+				  <a class="layui-btn layui-btn-danger layui-btn-xs wenx_del_{{d.id}}" lay-event="del">删除</a>
+				</script>
+			</div>
+		</div>
+	</div>
+<script src="__LAYUI__/layui.js" charset="utf-8"></script>	
+<script src="__ADMIN__/js/ajax.js" charset="utf-8"></script>		
+<script>
+layui.use('table', function(){
+	var table = layui.table
+		,form = layui.form;
+	table.render({
+	    elem: '#test'
+	    ,url: "{:url('article/index',['cate_id'=>input('param.cate_id')])}"
+	    ,cellMinWidth: 80
+	    ,cols: [[
+		    {type:'checkbox'}
+		    ,{field:'id', width:80, title: 'ID', sort: true}
+		    ,{field:'title', title: '标题'}
+		    ,{field:'create_time', title: '发布时间'}
+		    ,{field:'username', title: '发布者'}
+		    ,{field:'onclick', title: '点击量'}
+		    ,{field:'status', title:'状态', templet: '#switchTpl', unresize: true}
+		    ,{field:'isgood', title: '推荐', templet: '#isgood',width: 80}
+		    ,{field:'istop', title: '置顶', templet: '#istop',width: 80}
+		    ,{title:'操作',templet: '#barDemo', unresize: true ,minWidth:110}
+	    ]]
+	    ,page: true
+	});
+
+	//修改状态
+	form.on('switch(statusDemo)', function(obj){
+		if(obj.elem.checked === true){
+			data = {id:this.value,status:'1'}
+		}else{
+			data = {id:this.value,status:'0'}
+		}
+    	opt = {method:"post",url:"{:url('article/status')}",data:data};
+	    ajax(opt);
+  	});
+  
+	 //监听工具条
+  	table.on('tool(demo)', function(obj){
+  		var $ = layui.jquery;
+    	var data = {id:obj.data.id};
+	    if(obj.event === 'del'){    //删除单条数据
+	      	Dtop = $(this).offset().top;
+	      	Dleft = $(this).offset().left - 260;
+
+	      	if (Dtop + 154 > $(window).height()) {
+                Dtop = Dtop - 154;
+            }
+	      	if($(window).width()<768){
+	      		Dtop = Dleft = undefined;	
+	      	}
+	      	
+	      	layer.confirm('<i class="layui-layer-ico layui-layer-ico3"></i>真的要删除吗？', { offset: [Dtop,Dleft]}, function(index){   //offset 坐标
+	      		opt = {method:"post",url:"{:url('article/del',['cate_id'=>input('param.cate_id')])}",data:data};
+    			ajax(opt);
+        		layer.close(index);	
+			});
+	    } 
+  	});
+
+  	var $ = layui.$, active = {
+	    getCheckData: function(){ //删除多条数据
+	    	layer.confirm('<i class="layui-layer-ico layui-layer-ico3"></i>真的要删除吗？', function(index){
+
+		      	var checkStatus = table.checkStatus('test')
+		      	,data = checkStatus.data;
+		      	if(data.length == 0){
+		      		layer.msg('请选择要操作的数据！', {icon: 2,time: 2000});
+		      		return false;
+		      	}
+		      	var id = '';
+			    for (var i = 0; i <data.length; i++) {
+			        id += data[i].id + ',';
+			    }
+
+			    var article_data = {id:id};
+
+			    opt = {method:"post",url:"{:url('article/del',['cate_id'=>input('param.cate_id')])}",data:article_data};
+	    		ajax(opt);
+	    		layer.close(index);	
+	      	});
+	    },
+	    isgoodCheck: function(){ //设为推荐
+	    	var attr = $(this).data('attr');
+	    	layer.confirm('<i class="layui-layer-ico layui-layer-ico3"></i>确定要操作吗？', function(index){
+		      	var checkStatus = table.checkStatus('test')
+		      	,data = checkStatus.data;
+		      	if(data.length == 0){
+		      		layer.msg('请选择要操作的数据！', {icon: 2,time: 2000});
+		      		return false;
+		      	}
+		      	var g_data = {};  
+			    for (var i = 0; i <data.length; i++) {
+			    	if(attr == 'add'){
+			    		g_data[i] = {id:data[i].id,isgood:1}
+			    	}else if(attr == 'cancel'){
+			    		g_data[i] = {id:data[i].id,isgood:0}
+			    	}		
+			    }
+			    $.ajax({
+			        url: "{:url('article/isgood',['cate_id'=>input('param.cate_id')])}",
+			        type: 'POST',
+			        data:{'data':g_data},
+			        success: function(result){                
+			            layer.msg(result.msg, {time: 2000,icon: result.code},function(){
+		                    window.location.href = result.url;
+		                });
+			        }
+			    });
+	      	});
+	    },
+	    istopCheck: function(){ //设为置顶
+	    	var attr = $(this).data('attr');
+	    	layer.confirm('<i class="layui-layer-ico layui-layer-ico3"></i>确定要操作吗？', function(index){
+		      	var checkStatus = table.checkStatus('test')
+		      	,data = checkStatus.data;
+		      	if(data.length == 0){
+		      		layer.msg('请选择要操作的数据！', {icon: 2,time: 2000});
+		      		return false;
+		      	}
+		      	var g_data = {};  
+			    for (var i = 0; i <data.length; i++) {
+			    	if(attr == 'add'){
+			    		g_data[i] = {id:data[i].id,istop:1}
+			    	}else if(attr == 'cancel'){
+			    		g_data[i] = {id:data[i].id,istop:0}
+			    	}		
+			    }
+			    $.ajax({
+			        url: "{:url('article/istop',['cate_id'=>input('param.cate_id')])}",
+			        type: 'POST',
+			        data:{'data':g_data},
+			        success: function(result){                
+			            layer.msg(result.msg, {time: 2000,icon: result.code},function(){
+		                    window.location.href = result.url;
+		                });
+			        }
+			    });
+	      	});
+	    }
+  	};
+
+  	$('.demoTable .layui-btn').on('click', function(){
+    	var type = $(this).data('type');
+    	active[type] ? active[type].call(this) : '';
+  	});
+});
+</script>
+</body>
+</html>

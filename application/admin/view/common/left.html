@@ -1,0 +1,74 @@
+<div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      	<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      	<ul class="layui-nav layui-nav-tree" lay-shrink="all"  lay-filter="test">
+      		<li class="layui-nav-item">
+	          	<a class="" href="javascript:;"><i class="fa fa-gear fa-fw"></i><span>系统设置</span></a>
+	          	<dl class="layui-nav-child">
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('system/index')}" class="site-demo-active"><span>系统参数设置</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('mail/index')}" class="site-demo-active"><span>邮件设置</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('sms/index')}" class="site-demo-active"><span>短信设置</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('system/uploads')}" class="site-demo-active"><span>图片设置</span></a></dd>
+	          	</dl>
+	        </li>
+	        <li class="layui-nav-item">
+	          	<a class="" href="javascript:;"><i class="fa fa-gear fa-fw"></i><span>用户管理</span></a>
+	          	<dl class="layui-nav-child">
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('user/index')}" class="site-demo-active"><span>用户列表</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('power/index')}" class="site-demo-active"><span>权限列表</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('role/index')}" class="site-demo-active"><span>角色列表</span></a></dd>
+	          	</dl>
+	        </li>
+	        <li class="layui-nav-item">
+	          	<a href="javascript:;"><i class="fa fa-gear fa-fw"></i><span>会员管理</span></a>
+		        <dl class="layui-nav-child">
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('Member/index')}" class="site-demo-active"><span>会员列表</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('Group/index')}" class="site-demo-active"><span>会员组</span></a></dd>
+		        </dl>
+	        </li>
+	        <li class="layui-nav-item">
+	          	<a class="" href="javascript:;"><i class="fa fa-gear fa-fw"></i><span>商城管理</span></a>
+	          	<dl class="layui-nav-child">
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('Goods/index')}" class="site-demo-active"><span>商品列表</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('GoodsBrand/index')}" class="site-demo-active"><span>商品品牌</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('GoodsCategory/index')}" class="site-demo-active"><span>商品分类</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('GoodsType/index')}" class="site-demo-active"><span>商品模型</span></a></dd>
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('Spec/index')}" class="site-demo-active"><span>商品规格</span></a></dd>
+	          	</dl>
+	        </li>
+
+	        <li class="layui-nav-item">
+	          	<a class="" href="javascript:;"><i class="fa fa-gear fa-fw"></i><span>栏目管理</span></a>
+	          	<dl class="layui-nav-child">
+		            <dd><a href="javascript:;" data-type="tabAdd" data-url="{:url('category/index')}" class="site-demo-active"><span>栏目列表</span></a></dd>
+	          	</dl>
+	        </li>
+	        <li class="layui-nav-item">
+	          	<a href="javascript:;"><i class="fa fa-gear fa-fw"></i><span>内容</span></a>
+	          	{$menuc}
+		        <!-- <dl class="layui-nav-child">
+		            <dd><a href="javascript:;"><span>列表一</span></a>
+		            	<dl class="layui-nav-child">
+				            <dd><a href="javascript:;"><span>列表一</span></a>
+				            	<dl class="layui-nav-child">
+						            <dd><a href="javascript:;"><span>1212</span></a>
+										<dl class="layui-nav-child">
+								            <dd><a href="javascript:;"><span>1111</span></a></dd>
+								            <dd><a href="javascript:;"><span>11111</span></a></dd>
+								        </dl>
+						            </dd>
+						            <dd><a href="javascript:;"><span>1212</span></a></dd>
+						            <dd><a href=""><span>12121</span></a></dd>
+						        </dl>
+				            </dd>
+				            <dd><a href="javascript:;"><span>列表二</span></a></dd>
+				            <dd><a href=""><span>超链接</span></a></dd>
+				        </dl>
+		            </dd>
+		            <dd><a href="javascript:;"><span>列表二</span></a></dd>
+		            <dd><a href=""><span>超链接</span></a></dd>
+		        </dl> -->
+	        </li>
+      	</ul>
+    </div>
+</div>
